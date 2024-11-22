@@ -1,0 +1,30 @@
+# Arquivo .gitignore
+
+# Ignorar o arquivo de variáveis de ambiente
+.env
+
+# Ignorar diretórios de ambiente virtual
+venv/
+env/
+virtualenv/
+
+# Ignorar arquivos de byte compilados do Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignorar arquivos de log
+*.log
+
+# Ignorar arquivos temporários que podem ser criados
+*.temp
+
+# Ignorar diretórios de configuração do IDE ou editor
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Outros arquivos e diretórios a ignorar
+.DS_Store
+Thumbs.db
