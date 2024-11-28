@@ -15,7 +15,7 @@ from pydantic import BaseModel
 #         repo_id='Helsinki-NLP/opus-mt-en-fr',
 #         huggingfacehub_api_token = os.getenv("HUGGINGFACEHUB_API_TOKEN"),
 #         model_kwargs= {"temperature": 0.5, "max_length": 64},
-#         hugging_face_api_token = "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")
+
 
 #     # using the model 
 #     output = llm.invoke('If you are going through hell, keep going.')
