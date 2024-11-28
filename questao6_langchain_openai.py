@@ -34,13 +34,14 @@ from pydantic import BaseModel
 from langchain_openai.chat_models import ChatOpenAI
 import os
 from langchain.schema import HumanMessage
+from langchain_openai import OpenAI
 from dotenv import load_dotenv
 import sys
 import io
 
 # Configurando codificação padrão
-sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding='utf-8')
-sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding='utf-8')
+# sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding='utf-8')
+# sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding='utf-8')
 
 # Carrega as variáveis de ambiente
 load_dotenv()
@@ -64,16 +65,20 @@ async def translate(request: TranslationRequest):
         raise HTTPException(status_code=500, detail="API Key is not set")
 
     # Instancia o LLM
-    llm = ChatOpenAI(model="gpt-4o", api_key=api_key)
+    llm = OpenAI(model="gpt-3.5-turbo-instruct", 
+                api_key=api_key,     
+                temperature=0.7,
+                max_tokens=150 )
 
     # Cria a mensagem humana a ser enviada para o modelo
     message = HumanMessage(content=request.content)
     
-    # Invoca o modelo e retorna a resposta
-    response = llm.invoke([message])
-    if response.success:
-        return {"response": response.content}
-    else:
-        raise HTTPException(status_code=500, detail="Failed to generate response from the model")
+    translation_prompt = f"Translate the following text to French: {request.content}"
+    try:
+        # Invoca o modelo com o prompt de tradução
+        translated_text = llm.invoke(translation_prompt)
+        return {"translated_text": translated_text}
+    except Exception as e:
+        # Captura qualquer exceção durante a chamada ao modelo e retorna como erro HTTP
+        raise HTTPException(status_code=500, detail=str(e))
 
-# Remove a execução direta, pois agora a aplicação deve ser executada por um servidor ASGI
